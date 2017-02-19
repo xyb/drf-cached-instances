@@ -123,10 +123,10 @@ class CachedQueryset(object):
         else:
             return len(self.pks)
 
-    def filter(self, **kwargs):
+    def filter(self, *args, **kwargs):
         """Filter the base queryset."""
         assert not self._primary_keys
-        self.queryset = self.queryset.filter(**kwargs)
+        self.queryset = self.queryset.filter(*args, **kwargs)
         return self
 
     def get(self, *args, **kwargs):
@@ -153,3 +153,11 @@ class CachedQueryset(object):
         else:
             pks = self.pks[key]
         return CachedQueryset(self.cache, self.queryset, pks)
+
+    def order_by(self, *args, **kwargs):
+        self.queryset.order_by(*args, **kwargs)
+        return self
+
+    def distinct(self, *args, **kwargs):
+        self.queryset.distinct(*args, **kwargs)
+        return self
